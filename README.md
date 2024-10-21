@@ -30,7 +30,7 @@ Um quadro Kanban simples e responsivo, desenvolvido com **React**, **TypeScript*
 1. Clone o repositório:
    ```bash
    git clone https://github.com/MatheusLetra/KanbanBoard.git
-   cd seu-repositorio
+   cd KanbanBoard
    ```
 
 2. Instale as dependências:
