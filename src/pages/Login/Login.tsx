@@ -5,11 +5,11 @@ import {
 } from 'firebase/auth'
 import React, { Dispatch, SetStateAction } from 'react'
 import { FcGoogle } from 'react-icons/fc'
-import { auth } from '../../services/firebaseConfig'
+import { auth } from '../../services/firebase-config'
 import './Login.css'
 import { Task } from '../../types/Task'
+import { loadDataFromFirestore } from '../../utils/firestore-functions'
 import { loadData, saveData } from '../../utils/localstorage'
-import { loadDataFromFirestore } from '../../utils/persistdataonfirestore'
 import { UserInfo } from '../Home/Home'
 
 interface LoginProps {

@@ -4,11 +4,11 @@ import TaskForm from '../../components/TaskForm'
 import { Task } from '../../types/Task'
 import Login from '../Login/Login'
 import './Home.css'
-import { loadData, saveData } from '../../utils/localstorage'
 import {
   loadDataFromFirestore,
   updateDataOnFirestore,
-} from '../../utils/persistdataonfirestore'
+} from '../../utils/firestore-functions'
+import { loadData, saveData } from '../../utils/localstorage'
 
 export interface UserInfo {
   displayName: string | null

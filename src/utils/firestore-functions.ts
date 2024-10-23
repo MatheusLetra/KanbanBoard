@@ -1,5 +1,5 @@
 import { UserInfo } from '../pages/Home/Home'
-import { fetchArray, saveArray } from '../services/firestoreFunctions'
+import { fetchArray, saveArray } from '../services/firestore'
 import { loadData } from './localstorage'
 
 export async function updateDataOnFirestore(data: any) {
