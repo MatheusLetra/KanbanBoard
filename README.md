@@ -120,9 +120,10 @@ Para remover uma tarefa, clique no botão "Excluir" no card da tarefa desejada.
 
 As tarefas são salvas no `localStorage`, garantindo que os dados permaneçam mesmo após o recarregamento da página. A funcionalidade de salvar tarefas no Firestore está disponível somente para usuários que optarem por fazer login com a conta google.
 
-## 📷 Screenshot
+## 📷 Screenshots
 
-![Kanban Board Screenshot](./screenshot.png)
+![Kanban Board Login](./screenshot.png)
+![Kanban Board Form](./screenshot2.png)
 
 ## 📄 Licença
 
