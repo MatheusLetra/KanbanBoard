@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { FaTrash } from 'react-icons/fa';
 import { Task } from '../types/Task';
 
 interface CardProps {
@@ -29,10 +30,10 @@ const Card: React.FC<CardProps> = ({ task, deleteTask, onDragStart }) => {
   };
 
   return (
-    <div 
-      className="card" 
-      style={{ backgroundColor: task.color }} 
-      draggable 
+    <div
+      className="card"
+      style={{ backgroundColor: task.color }}
+      draggable
       onDragStart={handleDragStart}
       onTouchStart={handleTouchStart}
       ref={cardRef}
@@ -45,8 +46,8 @@ const Card: React.FC<CardProps> = ({ task, deleteTask, onDragStart }) => {
           <p>{task.time}</p>
         </>
       )}
-      <button onClick={handleDelete} style={{ marginTop: '8px', color: 'red' }}>
-        Excluir
+      <button onClick={handleDelete} style={{ backgroundColor: 'transparent', border: 'none', marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <FaTrash size={28} />
       </button>
     </div>
   );

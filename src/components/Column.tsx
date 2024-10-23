@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from './Card';
 import { Task } from '../types/Task';
+import Card from './Card';
 
 interface ColumnProps {
   status: Task['status'];
@@ -22,19 +22,15 @@ const Column: React.FC<ColumnProps> = ({ status, tasks, updateTaskStatus, delete
     e.preventDefault();
   };
 
-  const handleDragStart = (id: number) => {
-    return id
-  };
-
   return (
     <div className="column" onDrop={handleDrop} onDragOver={handleDragOver}>
       <h2>{status}</h2>
-      {tasks.map(task => (
-        <Card 
-          key={task.id} 
-          task={task} 
-          deleteTask={deleteTask} 
-          onDragStart={handleDragStart} 
+      {tasks.map((task) => (
+        <Card
+          key={task.id}
+          task={task}
+          deleteTask={deleteTask}
+          onDragStart={() => {}}
         />
       ))}
     </div>

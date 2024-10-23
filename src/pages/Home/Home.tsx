@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import KanbanBoard from '../../components/KanbanBoard';
 import TaskForm from '../../components/TaskForm';
-import Login from '../Login/Login'; 
 import { Task } from '../../types/Task';
-
+import Login from '../Login/Login';
 import './Home.css';
+import { loadData, saveData } from '../../utils/localstorage';
+
+export interface UserInfo {
+  displayName: string | null;
+  photoURL: string | null;
+  email: string | null;
+}
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem('tasks');
+    const savedTasks = loadData('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userData, setUserData] = useState<UserInfo | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    const userInfo = loadData('user-data');
+    if (userInfo) {
+      const parsedUserInfo = JSON.parse(userInfo);
+      setUserData(parsedUserInfo);
+      
+      if (parsedUserInfo.displayName) {
+        setIsModalOpen(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    saveData('tasks', tasks);
   }, [tasks]);
 
   const addTask = (newTask: Task) => {
@@ -30,8 +49,27 @@ const Home: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleLogout = () => {
+    saveData('user-data', {});
+    setUserData(null);
+    setIsModalOpen(true); 
+  };
+
   return (
     <div className="home">
+      {userData && userData.photoURL && (
+        <div className="user-info">
+          <img
+            src={userData.photoURL || ''}
+            alt={`${userData.displayName} Profile`}
+            className="user-photo"
+          />
+          <h3>{userData.displayName}</h3>
+          <button className="logout-button" onClick={handleLogout}>
+            Sair
+          </button>
+        </div>
+      )}
       <h1>Kanban Board</h1>
       <TaskForm addTask={addTask} />
       <KanbanBoard tasks={tasks} setTasks={setTasks} deleteTask={deleteTask} />
@@ -42,7 +80,7 @@ const Home: React.FC = () => {
             <button className="close-modal" onClick={closeModal}>
               &times;
             </button>
-            <Login />
+            <Login setIsModalOpen={setIsModalOpen} setUserData={setUserData} />
           </div>
         </div>
       )}
