@@ -7,15 +7,33 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { auth } from '../../services/firebaseConfig'
 import './Login.css'
-import { saveData } from '../../utils/localstorage'
+import { Task } from '../../types/Task'
+import { loadData, saveData } from '../../utils/localstorage'
+import { loadDataFromFirestore } from '../../utils/persistdataonfirestore'
 import { UserInfo } from '../Home/Home'
 
 interface LoginProps {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
   setUserData: Dispatch<SetStateAction<UserInfo | null>>
+  setTasks: Dispatch<SetStateAction<Task[]>>
 }
 
-const Login: React.FC<LoginProps> = ({ setIsModalOpen, setUserData }) => {
+const Login: React.FC<LoginProps> = ({
+  setIsModalOpen,
+  setUserData,
+  setTasks,
+}) => {
+  async function loadUserData() {
+    const userInfo = loadData('user-data')
+    if (userInfo) {
+      const parsedUserInfo = JSON.parse(userInfo)
+      if (parsedUserInfo.displayName) {
+        let response = await loadDataFromFirestore()
+        setTasks(response)
+      }
+    }
+  }
+
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider()
 
@@ -33,6 +51,7 @@ const Login: React.FC<LoginProps> = ({ setIsModalOpen, setUserData }) => {
       setUserData(userInfo)
       saveData('user-data', userInfo)
       setIsModalOpen(false)
+      loadUserData()
     } catch (error) {
       console.error('Google Login Error:', error)
     }

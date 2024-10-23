@@ -5,6 +5,10 @@ import { Task } from '../../types/Task'
 import Login from '../Login/Login'
 import './Home.css'
 import { loadData, saveData } from '../../utils/localstorage'
+import {
+  loadDataFromFirestore,
+  updateDataOnFirestore,
+} from '../../utils/persistdataonfirestore'
 
 export interface UserInfo {
   displayName: string | null
@@ -13,45 +17,76 @@ export interface UserInfo {
 }
 
 const Home: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(() => {
+  const initializeTasks = (): Task[] => {
     const savedTasks = loadData('tasks')
     return savedTasks ? JSON.parse(savedTasks) : []
-  })
+  }
 
+  const [tasks, setTasks] = useState<Task[]>(initializeTasks)
   const [userData, setUserData] = useState<UserInfo | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(true)
 
   useEffect(() => {
-    const userInfo = loadData('user-data')
-    if (userInfo) {
-      const parsedUserInfo = JSON.parse(userInfo)
-      setUserData(parsedUserInfo)
-
-      if (parsedUserInfo.displayName) {
-        setIsModalOpen(false)
-      }
-    }
+    handleUserInitialization()
   }, [])
 
   useEffect(() => {
-    saveData('tasks', tasks)
+    saveTasksToLocalStorage()
+    syncTasksWithFirestore()
   }, [tasks])
 
-  const addTask = (newTask: Task) => {
+  const handleUserInitialization = async () => {
+    loadUserInfoFromLocalStorage()
+    await loadTasksFromFirestore()
+  }
+
+  const loadUserInfoFromLocalStorage = () => {
+    const userInfo = loadData('user-data')
+    if (userInfo) {
+      const parsedUserInfo = JSON.parse(userInfo)
+      if (parsedUserInfo.displayName) {
+        setUserData(parsedUserInfo)
+        setIsModalOpen(false)
+      }
+    }
+  }
+
+  const loadTasksFromFirestore = async () => {
+    const userInfo = loadData('user-data')
+    if (userInfo) {
+      const parsedUserInfo = JSON.parse(userInfo)
+      if (parsedUserInfo.displayName) {
+        const fetchedTasks = await loadDataFromFirestore()
+        setTasks(fetchedTasks)
+      }
+    }
+  }
+
+  const saveTasksToLocalStorage = () => {
+    saveData('tasks', tasks)
+  }
+
+  const syncTasksWithFirestore = () => {
+    updateDataOnFirestore(tasks)
+  }
+
+  const handleAddTask = (newTask: Task) => {
     setTasks((prevTasks) => [...prevTasks, newTask])
   }
 
-  const deleteTask = (id: number) => {
+  const handleDeleteTask = (id: number) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id))
   }
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setIsModalOpen(false)
   }
 
-  const handleLogout = () => {
+  const handleUserLogout = () => {
     saveData('user-data', {})
+    saveData('tasks', [])
     setUserData(null)
+    setTasks([])
     setIsModalOpen(true)
   }
 
@@ -65,22 +100,30 @@ const Home: React.FC = () => {
             className="user-photo"
           />
           <h3>{userData.displayName}</h3>
-          <button className="logout-button" onClick={handleLogout}>
+          <button className="logout-button" onClick={handleUserLogout}>
             Sair
           </button>
         </div>
       )}
       <h1>Kanban Board</h1>
-      <TaskForm addTask={addTask} />
-      <KanbanBoard tasks={tasks} setTasks={setTasks} deleteTask={deleteTask} />
+      <TaskForm addTask={handleAddTask} />
+      <KanbanBoard
+        tasks={tasks}
+        setTasks={setTasks}
+        deleteTask={handleDeleteTask}
+      />
 
       {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
+        <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal" onClick={closeModal}>
+            <button className="close-modal" onClick={handleCloseModal}>
               &times;
             </button>
-            <Login setIsModalOpen={setIsModalOpen} setUserData={setUserData} />
+            <Login
+              setIsModalOpen={setIsModalOpen}
+              setUserData={setUserData}
+              setTasks={setTasks}
+            />
           </div>
         </div>
       )}
