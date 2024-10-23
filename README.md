@@ -5,22 +5,26 @@ Um quadro Kanban simples e responsivo, desenvolvido com **React**, **TypeScript*
 ## 📋 Funcionalidades
 
 - Adicionar tarefas com título, descrição, data e hora limite.
+  
 - Escolher a cor do card para cada tarefa.
+  
 - Organizar tarefas nas categorias:
   - **A fazer**
   - **Em progresso**
   - **Concluído**
-- Exibir data no formato `dd/MM/yyyy` (pt-BR).
-- Remover tarefas com confirmação.
-- **Login com Google**: Agora é possível fazer login utilizando sua conta do Google, os dados ainda nao estão sendo salvos.
-- Salvar dados no **localStorage** para persistência.
-- **Integração com Firestore**: 🕰️ Em desenvolvimento para salvar dados na nuvem.
+  
+- Remover tarefas.
+  
+- **Login com Google**: É possível fazer login utilizando sua conta do Google e salvar as tarefas em nuvem.
+  
+- Manter as tarefas salvas somente no dispositivo local.
+  
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **React** + **Vite**: Para construção do frontend.
 - **TypeScript**: Tipagem estática e melhorias de desenvolvimento.
-- **Firebase**: Para autenticação e integração com Firestore.
+- **Firebase**: Para autenticação e integração com Firestore e Firebase Authentication.
 
 ## 🚀 Como Rodar o Projeto
 
@@ -69,13 +73,35 @@ Um quadro Kanban simples e responsivo, desenvolvido com **React**, **TypeScript*
 ## 📝 Estrutura do Projeto
 
 ```bash
+
 src/
 |-- components/
 |   |-- TaskForm.tsx       # Formulário para adicionar novas tarefas
 |   |-- Card.tsx           # Componente para exibir cada tarefa
 |   |-- Column.tsx         # Componente para agrupar as tarefas em colunas de acordo com o status
-|-- App.tsx                # Componente principal
-|-- index.css              # Estilos globais e do Kanban
+|   |-- Column.tsx         # Componente para agrupar os tipos de coluna disponíveis (A Fazer, Em Progresso e Concluído)
+
+|-- pages/
+|   |-- Home/
+|      |-- Home.tsx        # Página que organiza todos os componentes relacionados as tasks
+|      |-- Home.css        # Estilização da Página Home.tsx
+|   |-- Login/
+|      |-- Login.tsx       # Página que agrupa as funções de Login (Google)
+|      |-- Login.css       # Estilização da Página Login.tsx
+
+|-- services/
+|   |-- firebase-config.ts # Cria o Client do Firebase e cria as instâncias dos serviços de autenticação e de armazenamento (Firebase Authentication e Firebase Firestore)
+|   |-- firestore.ts       # Agrupa as funções relacionadas a persistência dos dados no Firebase Firestore
+
+|-- types/
+|   |-- Task.ts            # Interface da Entidade de Tarefa
+
+|-- utils/
+|   |-- firestore-functions.ts  # Utiliza as funções do Firestore
+|   |-- localstorage.ts         # Funções relacionadas ao armazenamento dos dados no dispositivo local
+
+|-- App.tsx                # Componente principal padrão do React
+|-- index.css              # Estilos globais
 |-- types.ts               # Tipos utilizados no projeto
 |-- main.tsx               # Ponto de entrada do React
 |-- index.html             # HTML base com importação da fonte
@@ -84,7 +110,7 @@ src/
 ## 🖌️ Estilo e Personalização
 
 - A fonte padrão utilizada é a **Poppins**, carregada via Google Fonts.
-- Estilos personalizados para cards, formulário e botões são definidos no arquivo `index.css`, permitindo ajustes rápidos de design.
+- Estilos personalizados para cards, formulário e botões são definidos nos arquivos `.css` dentro da pasta `/pages`, permitindo ajustes rápidos de design.
 
 ## 🗑️ Remover Tarefas
 
@@ -92,7 +118,7 @@ Para remover uma tarefa, clique no botão "Excluir" no card da tarefa desejada.
 
 ## 💾 Persistência de Dados
 
-As tarefas são salvas no `localStorage`, garantindo que os dados permaneçam mesmo após o recarregamento da página. A funcionalidade de salvar tarefas no Firestore está em desenvolvimento. 🕰️
+As tarefas são salvas no `localStorage`, garantindo que os dados permaneçam mesmo após o recarregamento da página. A funcionalidade de salvar tarefas no Firestore está disponível somente para usuários que optarem por fazer login com a conta google.
 
 ## 📷 Screenshot
 
