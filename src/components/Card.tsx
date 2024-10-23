@@ -1,33 +1,33 @@
-import React, { useRef } from 'react';
-import { FaTrash } from 'react-icons/fa';
-import { Task } from '../types/Task';
+import React, { useRef } from 'react'
+import { FaTrash } from 'react-icons/fa'
+import { Task } from '../types/Task'
 
 interface CardProps {
-  task: Task;
-  deleteTask: (id: number) => void;
-  onDragStart: (id: number) => void;
+  task: Task
+  deleteTask: (id: number) => void
+  onDragStart: (id: number) => void
 }
 
 const Card: React.FC<CardProps> = ({ task, deleteTask, onDragStart }) => {
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null)
 
   const handleDelete = () => {
-    deleteTask(task.id);
-  };
+    deleteTask(task.id)
+  }
 
   const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData('taskId', task.id.toString());
-    onDragStart(task.id);
-  };
+    e.dataTransfer.setData('taskId', task.id.toString())
+    onDragStart(task.id)
+  }
 
   const handleTouchStart = () => {
-    onDragStart(task.id);
-  };
+    onDragStart(task.id)
+  }
 
   const formatDate = (dateString: string) => {
-    const dateParts = dateString.split('-');
-    return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`; // dd/mm/yyyy
-  };
+    const dateParts = dateString.split('-')
+    return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` // dd/mm/yyyy
+  }
 
   return (
     <div
@@ -46,11 +46,23 @@ const Card: React.FC<CardProps> = ({ task, deleteTask, onDragStart }) => {
           <p>{task.time}</p>
         </>
       )}
-      <button onClick={handleDelete} style={{ backgroundColor: 'transparent', border: 'none', marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <button
+        onClick={handleDelete}
+        style={{
+          backgroundColor: 'transparent',
+          border: 'none',
+          marginTop: '8px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
         <FaTrash size={28} />
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

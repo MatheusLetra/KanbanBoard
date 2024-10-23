@@ -1,46 +1,45 @@
-import { User as FirebaseUser, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import React, { Dispatch, SetStateAction } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { auth } from '../../services/firebaseConfig';
-import './Login.css';
-import {  saveData } from '../../utils/localstorage';
-import { UserInfo } from '../Home/Home';
+import {
+  User as FirebaseUser,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth'
+import React, { Dispatch, SetStateAction } from 'react'
+import { FcGoogle } from 'react-icons/fc'
+import { auth } from '../../services/firebaseConfig'
+import './Login.css'
+import { saveData } from '../../utils/localstorage'
+import { UserInfo } from '../Home/Home'
 
 interface LoginProps {
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-  setUserData: Dispatch<SetStateAction<UserInfo | null>>;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>
+  setUserData: Dispatch<SetStateAction<UserInfo | null>>
 }
 
 const Login: React.FC<LoginProps> = ({ setIsModalOpen, setUserData }) => {
-  const handleGoogleLogin = () => {
-    const provider = new GoogleAuthProvider();
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider()
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user: FirebaseUser = result.user;
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const user: FirebaseUser = result.user
+      const { displayName, photoURL, email } = user
 
-        const { displayName, photoURL, email } = user;
+      const userInfo = {
+        displayName,
+        photoURL,
+        email,
+      }
 
-        const userInfo = {
-          displayName,
-          photoURL,
-          email,
-        };
-
-        
-        setUserData(userInfo);
-        
-        saveData('user-data', userInfo);
-        
-        setIsModalOpen(false);
-      })
-      .catch((error) => {
-        console.error("Google Login Error:", error);
-      });
-  };
+      setUserData(userInfo)
+      saveData('user-data', userInfo)
+      setIsModalOpen(false)
+    } catch (error) {
+      console.error('Google Login Error:', error)
+    }
+  }
 
   const handleStayDisconnected = () => {
-    setIsModalOpen(false); 
+    setIsModalOpen(false)
   }
 
   return (
@@ -55,10 +54,10 @@ const Login: React.FC<LoginProps> = ({ setIsModalOpen, setUserData }) => {
         </div>
         <button className="stay-disconnected" onClick={handleStayDisconnected}>
           Não, mantenha as informações no dispositivo local
-          </button>
+        </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

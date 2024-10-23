@@ -1,10 +1,8 @@
-import React from 'react';
-import Home from './pages/Home/Home';
+import React from 'react'
+import Home from './pages/Home/Home'
 
 const App: React.FC = () => {
-  return (
-    <Home />
-  );
-};
+  return <Home />
+}
 
-export default App;
+export default App

@@ -1,59 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import KanbanBoard from '../../components/KanbanBoard';
-import TaskForm from '../../components/TaskForm';
-import { Task } from '../../types/Task';
-import Login from '../Login/Login';
-import './Home.css';
-import { loadData, saveData } from '../../utils/localstorage';
+import React, { useState, useEffect } from 'react'
+import KanbanBoard from '../../components/KanbanBoard'
+import TaskForm from '../../components/TaskForm'
+import { Task } from '../../types/Task'
+import Login from '../Login/Login'
+import './Home.css'
+import { loadData, saveData } from '../../utils/localstorage'
 
 export interface UserInfo {
-  displayName: string | null;
-  photoURL: string | null;
-  email: string | null;
+  displayName: string | null
+  photoURL: string | null
+  email: string | null
 }
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = loadData('tasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+    const savedTasks = loadData('tasks')
+    return savedTasks ? JSON.parse(savedTasks) : []
+  })
 
-  const [userData, setUserData] = useState<UserInfo | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [userData, setUserData] = useState<UserInfo | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(true)
 
   useEffect(() => {
-    const userInfo = loadData('user-data');
+    const userInfo = loadData('user-data')
     if (userInfo) {
-      const parsedUserInfo = JSON.parse(userInfo);
-      setUserData(parsedUserInfo);
-      
+      const parsedUserInfo = JSON.parse(userInfo)
+      setUserData(parsedUserInfo)
+
       if (parsedUserInfo.displayName) {
-        setIsModalOpen(false);
+        setIsModalOpen(false)
       }
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
-    saveData('tasks', tasks);
-  }, [tasks]);
+    saveData('tasks', tasks)
+  }, [tasks])
 
   const addTask = (newTask: Task) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-  };
+    setTasks((prevTasks) => [...prevTasks, newTask])
+  }
 
   const deleteTask = (id: number) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  };
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id))
+  }
 
   const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleLogout = () => {
-    saveData('user-data', {});
-    setUserData(null);
-    setIsModalOpen(true); 
-  };
+    saveData('user-data', {})
+    setUserData(null)
+    setIsModalOpen(true)
+  }
 
   return (
     <div className="home">
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

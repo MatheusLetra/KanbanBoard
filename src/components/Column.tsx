@@ -1,26 +1,31 @@
-import React from 'react';
-import { Task } from '../types/Task';
-import Card from './Card';
+import React from 'react'
+import { Task } from '../types/Task'
+import Card from './Card'
 
 interface ColumnProps {
-  status: Task['status'];
-  tasks: Task[];
-  updateTaskStatus: (id: number, newStatus: Task['status']) => void;
-  deleteTask: (id: number) => void;
+  status: Task['status']
+  tasks: Task[]
+  updateTaskStatus: (id: number, newStatus: Task['status']) => void
+  deleteTask: (id: number) => void
 }
 
-const Column: React.FC<ColumnProps> = ({ status, tasks, updateTaskStatus, deleteTask }) => {
+const Column: React.FC<ColumnProps> = ({
+  status,
+  tasks,
+  updateTaskStatus,
+  deleteTask,
+}) => {
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const taskId = e.dataTransfer.getData('taskId');
+    e.preventDefault()
+    const taskId = e.dataTransfer.getData('taskId')
     if (taskId) {
-      updateTaskStatus(parseInt(taskId), status);
+      updateTaskStatus(parseInt(taskId), status)
     }
-  };
+  }
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
+    e.preventDefault()
+  }
 
   return (
     <div className="column" onDrop={handleDrop} onDragOver={handleDragOver}>
@@ -34,7 +39,7 @@ const Column: React.FC<ColumnProps> = ({ status, tasks, updateTaskStatus, delete
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default Column;
+export default Column
